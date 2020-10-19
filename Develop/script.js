@@ -1,5 +1,5 @@
 // Special characters for the function created
-const specialCharacters = "!@#$%^&*(),?~/+-.><_'`=][{}])(|\  ";
+const symbolContainer = "!@#$%^&*(),?~/+-.><_'`=][{}])(|\  ";
 // activating password creation feature 
 const generateButton = document.getElementById('generate');
 // when generate button is clicked will call writePassword function
@@ -10,39 +10,39 @@ function passwordCreator() {
   //storing generated Password to password variable
   var password = inventPassword();
   // storing generated password to 
-  var passwordText = document.querySelector("#password");
+  var pwdTxt = document.querySelector("#password");
 
-  passwordText.value = password;
+  pwdTxt.value = password;
 
 }
 
 // Prompts that come up after you click generate password
 inventPassword = function () {
-  var passwordLength = prompt("Please enter the number of characters you want for you new password.  It must be more than 12 but less than 128.");
+  var retrievePwdLength = prompt("Please enter the number of characters you want for you new password.  It must be more than 12 but less than 128.");
 
   var numbers = confirm("Do you want numbers in your password?");
 
-  var lowerCases = confirm("Do you want lowercases in your password?");
+  var inputLowerCases = confirm("Do you want lowercases in your password?");
 
-  var upperCases = confirm("Do you want uppercases in your password?");
+  var inputUpperCases = confirm("Do you want uppercases in your password?");
 
-  var special = confirm("Do you want special characters in your password?");
+  var inputSpecial = confirm("Do you want special characters in your password?");
 
   // this is a minimum count for numbers, lowerCases, upperCases & specialCharacters
-  var minimumCount = 0;
+  var offSetCount = 0;
 
   // Empty minimums for numbers, lowerCases, upperCases & specialCharacters
 
 
-  var minimumLowerCases = "";
-  var minimumUpperCases = "";
-  var minimumSpecialCharacters = "";
-  var minimumNumbers = "";
-
+  var lowerCaseContainer = "";
+  var upperCaseContainer = "";
+  var specialCharsContainer = "";
+  var numberContainer = "";
+  var randPwdGen = "";
   // Generator functions**
   var objArray = {
     getNumbers: function () {
-      // GetNumber object function ulls numbers stored from Char code library and passes it on to the next function
+      // GetNumber object function pulls numbers stored from Char code library and passes it on to the next function
       return String.fromCharCode(Math.floor(Math.random() * 10 + 48));
     },
 
@@ -52,57 +52,59 @@ inventPassword = function () {
     },
 
     getUpperCases: function () {
-      // Pulls numbers stored 
+      // Pulls numbers stored upper case unicode characters passes it on to the next function
       return String.fromCharCode(Math.floor(Math.random() * 26 + 65));
     },
 
     getSpecialCharacters: function () {
-      return specialCharacters[Math.floor(Math.random() * specialCharacters.length)]
+      return symbolContainer[Math.floor(Math.random() * symbolContainer.length)]
     }
 
   };
 
   // Checks to make sure user selected ok for all and uses empty minimums from above
   do {
-    if (numbers === true) {
+    if (numbers && retrievePwdLength != randPwdGen.length) {
       //pulls numbers from functionArray getNumbers obj.
-      minimumNumbers += objArray.getNumbers();
-      minimumCount++;
+      numberContainer += objArray.getNumbers();
+      randPwdGen += numberContainer;
+      offSetCount++;
+     }
+     
+  
+     
+
+    if (inputLowerCases && retrievePwdLength != randPwdGen.length) {
+      lowerCaseContainer += objArray.getLowerCases();
+      randPwdGen += lowerCaseContainer;
+      offSetCount++;
+      
 
     }
+  
 
+    if (inputUpperCases && retrievePwdLength != randPwdGen.length) {
+      upperCaseContainer += objArray.getUpperCases();
+      randPwdGen += upperCaseContainer;
 
-    if (lowerCases === true) {
-      minimumLowerCases += objArray.getLowerCases();
-      minimumCount++;
+      offSetCount++;
+      
+    }
+   
+
+    if (inputSpecial && retrievePwdLength != randPwdGen.length) {
+      specialCharsContainer += objArray.getSpecialCharacters();
+      randPwdGen += specialCharsContainer;
+      offSetCount++;
+      
 
     }
+   
+   
+   
+ } while (randPwdGen.length != retrievePwdLength);
 
-    if (upperCases === true) {
-      minimumUpperCases += objArray.getUpperCases();
-      minimumCount++;
-
-    }
-
-    if (special === true) {
-      minimumSpecialCharacters += objArray.getSpecialCharacters();
-      minimumCount++;
-
-    }
-
-
-    // empty string variable for the for loop below
-    var randomPasswordGenerated = "";
-
-    // loop getting random characters
-
-    // to make sure characters are added to the password
-    randomPasswordGenerated += minimumNumbers;
-    randomPasswordGenerated += minimumLowerCases;
-    randomPasswordGenerated += minimumUpperCases;
-    randomPasswordGenerated += minimumSpecialCharacters;
-  } while (0 < (parseInt(passwordLength) - minimumCount))
-
-  return randomPasswordGenerated;
+ return  randPwdGen;
+  
 
 }
